@@ -26,7 +26,7 @@ wss.on("connection", (ws: WebSocket) => {
     console.log("Client disconnected");
   });
 });
-../client/src/App.tsx
+
 // HTTP 서버를 8080 포트에서 실행
 const PORT = 8080;
 server.listen(PORT, () => {
