@@ -4,12 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 const clientId = uuidv4();
 
 const ChatSection = () => {
+  const [input, setInput] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null); // input 필드에 포커스할 ref 생성
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [messages, setMessages] = useState<
     { clientId: string; text: string }[]
   >([]);
-  const [input, setInput] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null); // input 필드에 포커스할 ref 생성
 
   useEffect(() => {
     // WebSocket 서버 연결
@@ -18,13 +18,8 @@ const ChatSection = () => {
 
     // 서버로부터 메시지 수신
     ws.onmessage = (event) => {
-      const messageData = JSON.parse(event.data); // 수신된 메시지 파싱
+      const messageData = JSON.parse(event.data);
       setMessages((prevMessages) => [...prevMessages, messageData]);
-    };
-
-    // 연결 종료 시 콘솔 로그 출력
-    ws.onclose = () => {
-      console.log("Disconnected from WebSocket server");
     };
 
     return () => {
@@ -35,8 +30,8 @@ const ChatSection = () => {
 
   const sendMessage = () => {
     if (socket && input) {
-      const message = { text: input, clientId }; // 메시지와 clientId 포함
-      socket.send(JSON.stringify(message)); // JSON 문자열로 전송
+      const message = { text: input, clientId };
+      socket.send(JSON.stringify(message));
       setInput("");
     }
   };
