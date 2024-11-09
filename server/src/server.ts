@@ -11,12 +11,12 @@ wss.on("connection", (ws: WebSocket) => {
 
   // 클라이언트에서 메시지 수신 시 실행되는 이벤트
   ws.on("message", (message: string) => {
-    console.log(`Received message: ${message}`);
+    const parsedMessage = JSON.parse(message); // 메시지를 파싱하여 clientId와 text 추출
 
-    // 연결된 모든 클라이언트에게 메시지 브로드캐스트
+    // 모든 클라이언트에게 브로드캐스트
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(message.toString());
+        client.send(JSON.stringify(parsedMessage)); // JSON 형식으로 전송
       }
     });
   });
